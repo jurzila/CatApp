@@ -31,4 +31,9 @@ public class Feeder {
 
     public String getTimeFed() { return timeFed;
     }
+
+    @Override
+    public String toString() {
+        return " cat was fed at " +getTimeFed()+ " by " +getWhoFed();
+    }
 }

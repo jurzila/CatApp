@@ -33,6 +33,36 @@ public class DatabaseDataWorker {
        long newRowId = db.insert(DietDatabaseContract.FeedingEntry.TABLE_NAME, null, values);
    }
 
+   public Feeder getLastFeed() {
+       String[] columns = {
+               DietDatabaseContract.FeedingEntry.COLUMN_DATE,
+               DietDatabaseContract.FeedingEntry.COLUMN_TIME,
+               DietDatabaseContract.FeedingEntry.COLUMN_CALORIES,
+               DietDatabaseContract.FeedingEntry.COLUMN_NAME};
+       Cursor cursor = db.query(DietDatabaseContract.FeedingEntry.TABLE_NAME, columns,
+               null,
+               null,
+               null,
+               null,
+               null);
+
+       cursor.moveToLast();
+
+       int dateIndex = cursor.getColumnIndex(DietDatabaseContract.FeedingEntry.COLUMN_DATE);
+       String date = cursor.getString(dateIndex);
+       int timeIndex = cursor.getColumnIndex(DietDatabaseContract.FeedingEntry.COLUMN_TIME);
+       String time = cursor.getString(timeIndex);
+       int calIndex = cursor.getColumnIndex(DietDatabaseContract.FeedingEntry.COLUMN_CALORIES);
+       Double cal = cursor.getDouble(calIndex);
+       int nameIndex = cursor.getColumnIndex(DietDatabaseContract.FeedingEntry.COLUMN_NAME);
+       String whoFed = cursor.getString(nameIndex);
+
+       Feeder lastFeed = new Feeder(cal, date, time, whoFed);
+
+       return  lastFeed;
+
+   }
+
    /*public List<Feeder> getAllDietEntries() throws ParseException {
        String[] columns = {
                DietDatabaseContract.FeedingEntry.COLUMN_TIME,
