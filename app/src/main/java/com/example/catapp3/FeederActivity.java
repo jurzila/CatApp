@@ -16,8 +16,10 @@ import com.example.catapp3.database.DietOpenHelper;
 import com.example.catapp3.model.Feeder;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -44,16 +46,21 @@ public class FeederActivity extends AppCompatActivity {
                 Double cal = Double.parseDouble(caloriesBox.getText().toString());
                 //create exception for null
 
-                SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
-                Date date = new Date(System.currentTimeMillis());
+                Calendar calendar = Calendar.getInstance();
 
-                if(!cal.equals(0)){
+                SimpleDateFormat dateOnly = new SimpleDateFormat("MM/dd/yyyy");
+                String date = dateOnly.format(calendar.getTime());
+
+                SimpleDateFormat timeOnly = new SimpleDateFormat("HH:mm:ss");
+                String time = timeOnly.format(calendar.getTime());
+
+                if(!cal.equals(0.00)){//TODO:Ask about how to get through null
 
                     final DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            feederList.add(new Feeder(cal, date, "Mom"));
-                            worker.insertDiet(cal, date, "Mom");
+                            feederList.add(new Feeder(cal, date, time, "Mom"));
+                            worker.insertDiet(cal, date, time, "Mom");
                             finish();
                         }
                     };
@@ -61,8 +68,8 @@ public class FeederActivity extends AppCompatActivity {
                     final DialogInterface.OnClickListener negativeListener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            feederList.add(new Feeder(cal, date, "Dad"));
-                            worker.insertDiet(cal, date, "Dad");
+                            feederList.add(new Feeder(cal, date, time, "Dad"));
+                            worker.insertDiet(cal, date, time, "Dad");
                             finish();
 
                         }

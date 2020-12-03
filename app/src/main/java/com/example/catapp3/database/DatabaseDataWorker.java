@@ -20,11 +20,12 @@ public class DatabaseDataWorker {
        this.db = db;
    }
 
-   public void insertDiet(Double calories, Date time, String whoFed){
+   public void insertDiet(Double calories,String date, String time, String whoFed){
 
        //TODO
        ContentValues values = new ContentValues();
 
+       values.put(DietDatabaseContract.FeedingEntry.COLUMN_DATE, String.valueOf(date));
        values.put(DietDatabaseContract.FeedingEntry.COLUMN_TIME, String.valueOf(time));
        values.put(DietDatabaseContract.FeedingEntry.COLUMN_CALORIES, calories);
        values.put(DietDatabaseContract.FeedingEntry.COLUMN_NAME, whoFed);
@@ -32,7 +33,7 @@ public class DatabaseDataWorker {
        long newRowId = db.insert(DietDatabaseContract.FeedingEntry.TABLE_NAME, null, values);
    }
 
-   public List<Feeder> getAllDietEntries() throws ParseException {
+   /*public List<Feeder> getAllDietEntries() throws ParseException {
        String[] columns = {
                DietDatabaseContract.FeedingEntry.COLUMN_TIME,
                DietDatabaseContract.FeedingEntry.COLUMN_CALORIES,
@@ -63,6 +64,6 @@ public class DatabaseDataWorker {
 
        return feederList;
 
-   }
+   }*/
 
 }
