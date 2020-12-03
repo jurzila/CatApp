@@ -1,6 +1,7 @@
 package com.example.catapp3;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,8 +14,22 @@ import android.widget.TextView;
 
 import com.example.catapp3.database.DatabaseDataWorker;
 import com.example.catapp3.database.DietOpenHelper;
+import com.example.catapp3.model.Feeder;
 
 public class HomeActivity extends AppCompatActivity {
+
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        DietOpenHelper helper = new DietOpenHelper(this);
+        final SQLiteDatabase dietDatabase = helper.getReadableDatabase();
+        final DatabaseDataWorker worker = new DatabaseDataWorker(dietDatabase);
+        String lastFeed = worker.getLastFeed().toString();
+        TextView lastFeedInfo = findViewById(R.id.displayLastFeed);
+        lastFeedInfo.setText("Last time the" + lastFeed + ".");
+        //TODO: make code less repetitive
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +45,6 @@ public class HomeActivity extends AppCompatActivity {
         TextView lastFeedInfo = findViewById(R.id.displayLastFeed);
 
         String lastFeed = worker.getLastFeed().toString();
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -49,5 +63,6 @@ public class HomeActivity extends AppCompatActivity {
         });
 
     }
+
 }
 
