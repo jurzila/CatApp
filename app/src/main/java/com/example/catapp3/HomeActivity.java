@@ -33,6 +33,9 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+
         super.onCreate(savedInstanceState);
         DietOpenHelper helper = new DietOpenHelper(this);
         final SQLiteDatabase dietDatabase = helper.getReadableDatabase();
