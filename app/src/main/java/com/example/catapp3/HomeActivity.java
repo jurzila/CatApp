@@ -1,33 +1,36 @@
 package com.example.catapp3;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.catapp3.database.DatabaseDataWorker;
-import com.example.catapp3.database.DietOpenHelper;
-import com.example.catapp3.model.Feeder;
+import com.example.catapp3.database.CatOpenHelper;
 
 public class HomeActivity extends AppCompatActivity {
 
 
+    private String lastFeed;
+
     @Override
     protected void onResume(){
         super.onResume();
-        DietOpenHelper helper = new DietOpenHelper(this);
-        final SQLiteDatabase dietDatabase = helper.getReadableDatabase();
-        final DatabaseDataWorker worker = new DatabaseDataWorker(dietDatabase);
-        String lastFeed = worker.getLastFeed().toString();
+        CatOpenHelper helper = new CatOpenHelper(this);
+        final SQLiteDatabase catDatabase = helper.getReadableDatabase();
+        final DatabaseDataWorker worker = new DatabaseDataWorker(catDatabase);
+        try {
+            lastFeed ="Last time the" + worker.getLastFeed().toString() + ".";
+        } catch (CursorIndexOutOfBoundsException e) {
+            lastFeed = "Never been fed yet";
+        }
         TextView lastFeedInfo = findViewById(R.id.displayLastFeed);
-        lastFeedInfo.setText("Last time the" + lastFeed + ".");
+        lastFeedInfo.setText(lastFeed);
         //TODO: make code less repetitive
     }
 
@@ -37,7 +40,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
         super.onCreate(savedInstanceState);
-        DietOpenHelper helper = new DietOpenHelper(this);
+        CatOpenHelper helper = new CatOpenHelper(this);
         final SQLiteDatabase dietDatabase = helper.getReadableDatabase();
         final DatabaseDataWorker worker = new DatabaseDataWorker(dietDatabase);
 
@@ -47,11 +50,15 @@ public class HomeActivity extends AppCompatActivity {
 
         TextView lastFeedInfo = findViewById(R.id.displayLastFeed);
 
-        String lastFeed = worker.getLastFeed().toString();
+        try {
+            lastFeed ="Last time the" + worker.getLastFeed().toString() + ".";
+        } catch (CursorIndexOutOfBoundsException e) {
+            lastFeed = "Never been fed yet";
+        }
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                lastFeedInfo.setText("Last time the" + lastFeed + ".");
+                lastFeedInfo.setText(lastFeed);
             }
         });
 

@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -12,15 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.catapp3.database.DatabaseDataWorker;
-import com.example.catapp3.database.DietOpenHelper;
+import com.example.catapp3.database.CatOpenHelper;
 import com.example.catapp3.model.Feeder;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class FeederActivity extends AppCompatActivity {
@@ -31,9 +28,9 @@ public class FeederActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DietOpenHelper helper = new DietOpenHelper(this);
-        final SQLiteDatabase dietDatabase = helper.getReadableDatabase();
-        final DatabaseDataWorker worker = new DatabaseDataWorker(dietDatabase);
+        CatOpenHelper helper = new CatOpenHelper(this);
+        final SQLiteDatabase catDatabase = helper.getReadableDatabase();
+        final DatabaseDataWorker worker = new DatabaseDataWorker(catDatabase);
 
         setContentView(R.layout.activity_feeder);
         Button feedButton = findViewById(R.id.button_fed);

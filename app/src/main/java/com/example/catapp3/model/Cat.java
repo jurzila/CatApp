@@ -1,5 +1,7 @@
 package com.example.catapp3.model;
 
+import java.util.Date;
+
 public class Cat {
 
     private String name;
@@ -7,13 +9,15 @@ public class Cat {
     private String breed;
     private String birthday;
     private Double weight;
+    private int userId;
 
-    public Cat(String name, String sex, String breed, String birthday, Double weight) {
+    public Cat(String name, String sex, String breed, String birthday, Double weight, int userId) {
         this.name = name;
         this.sex = sex;
         this.breed = breed;
         this.birthday = birthday;
         this.weight = weight;
+        this.userId = userId;
     }
 
     public Cat(String name, String sex, String breed, String birthday) {
