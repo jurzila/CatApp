@@ -74,12 +74,42 @@ public class DatabaseDataWorker {
                 null,
                 null);
 
-        if (csr.moveToFirst()) {
+        while(csr.moveToNext()) {
             int IdIndex = csr.getColumnIndex(CatDatabaseContract.userTable.COLUMN_ID);
             userId = csr.getInt(IdIndex);
         }
         return userId;
     }
+
+    public String getUserPassword(String username){
+
+        String password = "";
+        String whereClause = "Username=?";
+        String[] whereArgs = new String[]{String.valueOf(username)};
+        String[] columns = {
+                CatDatabaseContract.userTable.COLUMN_ID,
+                CatDatabaseContract.userTable.COLUMN_USERNAME,
+                CatDatabaseContract.userTable.COLUMN_EMAIL,
+                CatDatabaseContract.userTable.COLUMN_PASSWORD
+        };
+        Cursor csr = db.query(CatDatabaseContract.userTable.TABLE_NAME,
+                columns,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null);
+
+        while(csr.moveToNext()) {
+            int passIndex = csr.getColumnIndex(CatDatabaseContract.userTable.COLUMN_PASSWORD);
+            password = csr.getString(passIndex);
+
+        }
+
+        return password;
+
+    }
+
 
     public int getCatID(int userId){
 

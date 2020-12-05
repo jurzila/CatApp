@@ -3,10 +3,15 @@ package com.example.catapp3;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.catapp3.database.CatOpenHelper;
+import com.example.catapp3.database.DatabaseDataWorker;
+import com.google.android.material.snackbar.Snackbar;
 
 public class Login1Activity extends AppCompatActivity {
 
@@ -16,6 +21,8 @@ public class Login1Activity extends AppCompatActivity {
     private Button loginButton;
     private Button registerButton;
     private int counter = 5;
+    private String givenUsername;
+    private String givenPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +34,8 @@ public class Login1Activity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         registerButton = findViewById(R.id.registerButton);
 
-
+        givenUsername = usernameEditText.getText().toString();
+        givenPassword = passwordEditText.getText().toString();
 
 
         registerButton.setOnClickListener(new View.OnClickListener() {
@@ -50,18 +58,33 @@ public class Login1Activity extends AppCompatActivity {
         }
 
     private void validate(String username, String userPassword){
-        if(username.equals("Admin") && userPassword.equals("1234")){
-            Intent intentLogin = new Intent(Login1Activity.this, HomeActivity.class);
-            startActivity(intentLogin);
-        }else{
-            counter--;
 
-            //TODO add info box about failed log in attempt
+        CatOpenHelper helper = new CatOpenHelper(this);
+        final SQLiteDatabase catDatabase = helper.getReadableDatabase();
+        final DatabaseDataWorker worker = new DatabaseDataWorker(catDatabase);
 
-            if(counter == 0){
-                loginButton.setEnabled(false);
+        try {
+            String password = worker.getUserPassword(username);
+            if(userPassword.equals(password)){
+                Intent intentLogin = new Intent(Login1Activity.this, HomeActivity.class);
+                startActivity(intentLogin);
+            }else{
+                counter--;
+
+                //TODO add info box about failed log in attempt
+                String wrongPass = "Failed to log in. Attempts left: " + counter + ".";
+                Snackbar.make(findViewById(android.R.id.content), wrongPass, Snackbar.LENGTH_LONG).show();
+
+                if(counter == 0){
+                    loginButton.setEnabled(false);
+                }
             }
+        }catch(Exception e){
+            String noUserMessage = "Username does not exist";
+            Snackbar.make(findViewById(android.R.id.content), noUserMessage, Snackbar.LENGTH_LONG).show();
         }
+
+
 
 
     }
