@@ -8,14 +8,14 @@ public class CatDatabaseContract {
 
     public static final class FeedingEntry {
         public static String TABLE_NAME = "Diet";
-        //public static String COLUMN_CATID= "CatId";
+        public static String COLUMN_CATID= "CatId";
         public static String COLUMN_DATE= "Date";
         public static String COLUMN_TIME = "Time";
         public static String COLUMN_CALORIES = "CaloriesFed";
         public static String COLUMN_NAME = "Feeder";
         //...
         public static final String SQL_CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
-                //COLUMN_CATID + " INTEGER PRIMARY KEY NOT NULL, " +
+                COLUMN_CATID + " INTEGER NOT NULL, " +
                 COLUMN_DATE + " TIMESTAMP, " +
                 COLUMN_TIME + " TIMESTAMP, " +
                 COLUMN_CALORIES + " FLOAT, " +
@@ -24,6 +24,7 @@ public class CatDatabaseContract {
     }
 
     public static final class catTable{
+        public static final String COLUMN_IMAGE_DATA = "ImageData";
         public static String TABLE_NAME = "Cats";
         public static String COLUMN_USER_ID= "UserId";
         public static String COLUMN_CATID= "CatId";
@@ -40,7 +41,8 @@ public class CatDatabaseContract {
                 COLUMN_SEX + " TEXT NOT NULL, " +
                 COLUMN_BREED + " TEXT NOT NULL, " +
                 COLUMN_DOB + " TEXT NOT NULL, " +
-                COLUMN_WEIGHT + " FLOAT " +
+                COLUMN_WEIGHT + " FLOAT, " +
+                COLUMN_IMAGE_DATA + " BLOB " +
                 "); ";
     }
 

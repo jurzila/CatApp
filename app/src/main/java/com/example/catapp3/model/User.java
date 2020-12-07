@@ -2,13 +2,20 @@ package com.example.catapp3.model;
 
 public class User {
 
-    private Integer usernameId;
+    private int usernameId;
     private String username;
     private String password;
     private String email;
     private Cat cat;
 
+
     public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+    public User(int usernameId, String username, String password, String email) {
         this.usernameId = usernameId;
         this.username = username;
         this.password = password;
@@ -32,7 +39,7 @@ public class User {
         return email;
     }
 
-    public Integer getUsernameId() {
+    public int getUsernameId() {
         return usernameId;
     }
 }

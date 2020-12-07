@@ -1,5 +1,7 @@
 package com.example.catapp3.model;
 
+import android.graphics.Bitmap;
+
 import java.util.Date;
 
 public class Cat {
@@ -10,6 +12,7 @@ public class Cat {
     private String birthday;
     private Double weight;
     private int userId;
+    private Bitmap picture;
 
     public Cat(String name, String sex, String breed, String birthday, Double weight, int userId) {
         this.name = name;
@@ -20,11 +23,11 @@ public class Cat {
         this.userId = userId;
     }
 
-    public Cat(String name, String sex, String breed, String birthday) {
+    public Cat(String name, String birthday, int userId, Bitmap picture) {
         this.name = name;
-        this.sex = sex;
-        this.breed = breed;
         this.birthday = birthday;
+        this.userId = userId;
+        this.picture = picture;
 
     }
 
@@ -52,5 +55,7 @@ public class Cat {
         return birthday;
     }
 
-
+    public Bitmap getPicture() {
+        return picture;
+    }
 }

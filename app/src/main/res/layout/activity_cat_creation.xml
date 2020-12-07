@@ -13,6 +13,7 @@
         android:text="@string/create_cat_profile"
         app:layout_constraintBottom_toTopOf="@+id/catNameBox"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.105"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,6 +26,7 @@
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/catSexBox"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/catProfInfo" />
 
@@ -71,46 +73,43 @@
         android:ems="10"
         android:hint="@string/cat_s_weight"
         android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/addPhotoButton"
+        app:layout_constraintBottom_toTopOf="@+id/createCatButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateOfBirthBox" />
 
     <Button
-        android:id="@+id/addPhotoButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:text="@string/profile_picture"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/pictureFileBox"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weightBox" />
-
-    <TextView
-        android:id="@+id/pictureFileBox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/addPhotoButton"
-        app:layout_constraintTop_toBottomOf="@+id/weightBox" />
-
-    <Button
         android:id="@+id/createCatButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="62dp"
         android:text="@string/create"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/pictureFileBox"
-        app:layout_constraintTop_toBottomOf="@+id/addPhotoButton" />
+        app:layout_constraintHorizontal_bias="0.881"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weightBox" />
+
+    <ImageView
+        android:id="@+id/catProfilePicture"
+        android:layout_width="56dp"
+        android:layout_height="49dp"
+        app:layout_constraintBottom_toTopOf="@+id/catPictureButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toEndOf="@+id/catProfInfo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+    <Button
+        android:id="@+id/catPictureButton"
+        android:layout_width="113dp"
+        android:layout_height="34dp"
+        android:text="@string/add_cat_picture"
+        app:layout_constraintBottom_toTopOf="@+id/catNameBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/catProfInfo"
+        app:layout_constraintTop_toBottomOf="@+id/catProfilePicture" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

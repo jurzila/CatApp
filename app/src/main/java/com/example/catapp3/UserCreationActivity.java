@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.catapp3.database.DatabaseDataWorker;
 import com.example.catapp3.database.CatOpenHelper;
@@ -16,7 +17,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class UserCreationActivity extends AppCompatActivity {
 
-    public static String EXTRA_USERNAME = "Username";
+    public static String EXTRA_USERNAME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,24 +39,63 @@ public class UserCreationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String username = usernameEditText.getText().toString();
-                String email = emailEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
-                String passwordRep = passwordRepEditText.getText().toString();
+                if (v == createButton) {
+                    boolean error = false;
+                    if (isEmpty(usernameEditText)){
+                        error = true;
+                        usernameEditText.setError("Fill in username");
+                    }
+                    if (isEmpty(emailEditText)) {
+                        error = true;
+                        emailEditText.setError("Fill in email");
+                    }
+                    if (isEmpty(passwordEditText)) {
+                        error = true;
+                        passwordEditText.setError("Enter a password");
+                    }
+                    if (isEmpty(passwordRepEditText)) {
+                        error = true;
+                        passwordRepEditText.setError("Repeat the password");
+                    }
+                    if (!error) {
 
-                if(!password.equals(passwordRep)){
-                    String passBadMessage = "Passwords do not match";
-                    Snackbar.make(v, passBadMessage, Snackbar.LENGTH_LONG).show();
-                }else {
-                    User newUser = new User(username, email, password);
-                    worker.insertUser(username, email, password);
-                    intent.putExtra(EXTRA_USERNAME, newUser.getUserName());
-                    startActivity(intent);
-                    finish();
+                        String username = usernameEditText.getText().toString();
+                        String email = emailEditText.getText().toString();
+                        String password = passwordEditText.getText().toString();
+                        String passwordRep = passwordRepEditText.getText().toString();
+
+                        if (!password.equals(passwordRep)) {
+                            String passBadMessage = "Passwords do not match";
+                            Snackbar.make(v, passBadMessage, Snackbar.LENGTH_LONG).show();
+                        } else {
+                            int insertValidation = worker.insertUser(username, email, password);
+                            if (insertValidation == 0) {
+                                User newUser = new User(username, email, password);
+                                intent.putExtra(EXTRA_USERNAME, newUser.getUserName());
+                                startActivity(intent);
+                                finish();
+                            } else if (insertValidation == 1) {
+                                String text = "Username already exists";
+                                Toast toastUser = Toast.makeText(UserCreationActivity.this, text, Toast.LENGTH_LONG);
+                                toastUser.show();
+                            } else if (insertValidation == 2) {
+                                String text = "Email already exists";
+                                Toast toastUser = Toast.makeText(UserCreationActivity.this, text, Toast.LENGTH_LONG);
+                                toastUser.show();
+                            }else if (insertValidation == 3) {
+                                String text = "Username and email already exists";
+                                Toast toastUser = Toast.makeText(UserCreationActivity.this, text, Toast.LENGTH_LONG);
+                                toastUser.show();
+                            }
+                        }
+                    }
                 }
             }
         });
-
-
     }
+
+    private boolean isEmpty(EditText etText){
+        return etText.getText().toString().trim().length() == 0;
+    }
+
 }

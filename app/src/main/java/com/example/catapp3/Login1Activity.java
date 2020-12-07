@@ -11,18 +11,18 @@ import android.widget.EditText;
 
 import com.example.catapp3.database.CatOpenHelper;
 import com.example.catapp3.database.DatabaseDataWorker;
+import com.example.catapp3.model.User;
 import com.google.android.material.snackbar.Snackbar;
 
 public class Login1Activity extends AppCompatActivity {
 
-
+    public static String EXTRA_CAT_ID;
     private EditText usernameEditText;
     private EditText passwordEditText;
     private Button loginButton;
     private Button registerButton;
     private int counter = 5;
-    private String givenUsername;
-    private String givenPassword;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +33,6 @@ public class Login1Activity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.loginPassword);
         loginButton = findViewById(R.id.loginButton);
         registerButton = findViewById(R.id.registerButton);
-
-        givenUsername = usernameEditText.getText().toString();
-        givenPassword = passwordEditText.getText().toString();
-
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,14 +60,16 @@ public class Login1Activity extends AppCompatActivity {
         final DatabaseDataWorker worker = new DatabaseDataWorker(catDatabase);
 
         try {
-            String password = worker.getUserPassword(username);
+            User currentUser = worker.getUserPassword(username);
+            String password = currentUser.getPassword();
             if(userPassword.equals(password)){
+
                 Intent intentLogin = new Intent(Login1Activity.this, HomeActivity.class);
+                intentLogin.putExtra(EXTRA_CAT_ID, worker.getCatID(currentUser.getUsernameId()));
                 startActivity(intentLogin);
             }else{
                 counter--;
 
-                //TODO add info box about failed log in attempt
                 String wrongPass = "Failed to log in. Attempts left: " + counter + ".";
                 Snackbar.make(findViewById(android.R.id.content), wrongPass, Snackbar.LENGTH_LONG).show();
 

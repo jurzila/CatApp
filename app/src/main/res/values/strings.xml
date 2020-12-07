@@ -26,4 +26,6 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="pick_cat_profile_picture">Pick cat profile picture</string>
+    <string name="add_cat_picture">Add cat picture</string>
 </resources>
