@@ -15,15 +15,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.685" />
+        app:layout_constraintVertical_bias="0.711" />
 
     <TextView
         android:id="@+id/displayLastFeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
         app:layout_constraintBottom_toTopOf="@+id/button_feederOp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/catNameDisplay"
         app:layout_constraintVertical_bias="0.552" />
@@ -43,9 +44,19 @@
         android:id="@+id/catNameDisplay"
         android:layout_width="71dp"
         android:layout_height="18dp"
-        android:layout_marginBottom="57dp"
         app:layout_constraintBottom_toTopOf="@+id/displayLastFeed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/catPictureDisplay" />
+
+    <Button
+        android:id="@+id/feedingMonitorNav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Feeding Monitor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_feederOp"
+        app:layout_constraintVertical_bias="0.437" />
 </androidx.constraintlayout.widget.ConstraintLayout>

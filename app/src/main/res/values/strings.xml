@@ -9,7 +9,7 @@
     <string name="cat_s_name">Name</string>
     <string name="cat_s_sex">Sex</string>
     <string name="cat_s_breed">Breed</string>
-    <string name="cat_s_date_of_birth">Date of birth</string>
+    <string name="cat_s_date_of_birth">YYYY/MM/DD</string>
     <string name="cat_s_weight">Weight</string>
     <string name="profile_picture">Profile picture</string>
     <string name="textview">TextView</string>
@@ -28,4 +28,10 @@
     <string name="login_failed">"Login failed"</string>
     <string name="pick_cat_profile_picture">Pick cat profile picture</string>
     <string name="add_cat_picture">Add cat picture</string>
+
+    <string-array name="sex_arrays">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
 </resources>

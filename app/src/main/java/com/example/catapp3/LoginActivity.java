@@ -14,9 +14,10 @@ import com.example.catapp3.database.DatabaseDataWorker;
 import com.example.catapp3.model.User;
 import com.google.android.material.snackbar.Snackbar;
 
-public class Login1Activity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     public static String EXTRA_CAT_ID;
+    public static String EXTRA_USER_ID;
     private EditText usernameEditText;
     private EditText passwordEditText;
     private Button loginButton;
@@ -37,7 +38,7 @@ public class Login1Activity extends AppCompatActivity {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentRegister = new Intent(Login1Activity.this, UserCreationActivity.class);
+                Intent intentRegister = new Intent(LoginActivity.this, UserCreationActivity.class);
                 startActivity(intentRegister);
             }
         });
@@ -63,10 +64,19 @@ public class Login1Activity extends AppCompatActivity {
             User currentUser = worker.getUserPassword(username);
             String password = currentUser.getPassword();
             if(userPassword.equals(password)){
-
-                Intent intentLogin = new Intent(Login1Activity.this, HomeActivity.class);
-                intentLogin.putExtra(EXTRA_CAT_ID, worker.getCatID(currentUser.getUsernameId()));
-                startActivity(intentLogin);
+                if(worker.isCatCreated(currentUser.getUsernameId()) == 1) {
+                    Intent intentLogin = new Intent(LoginActivity.this, HomeActivity.class);
+                    intentLogin.putExtra(EXTRA_CAT_ID, worker.getCatID(currentUser.getUsernameId()));
+                    startActivity(intentLogin);
+                }else if(worker.isCatCreated(currentUser.getUsernameId()) > 1) {
+                    Intent intentLoginWithCatSelection = new Intent(LoginActivity.this, CatSelectionActivity.class);
+                    intentLoginWithCatSelection.putExtra(EXTRA_USER_ID, currentUser.getUsernameId());
+                    startActivity(intentLoginWithCatSelection);
+                }else if(worker.isCatCreated(currentUser.getUsernameId()) == 0){
+                    Intent intentLoginCatCreation = new Intent(LoginActivity.this, CatCreationActivity.class);
+                    intentLoginCatCreation.putExtra(EXTRA_USER_ID, currentUser.getUsernameId());
+                    startActivity(intentLoginCatCreation);
+                }
             }else{
                 counter--;
 

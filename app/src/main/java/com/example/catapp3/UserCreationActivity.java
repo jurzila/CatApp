@@ -70,9 +70,9 @@ public class UserCreationActivity extends AppCompatActivity {
                         } else {
                             int insertValidation = worker.insertUser(username, email, password);
                             if (insertValidation == 0) {
-                                User newUser = new User(username, email, password);
-                                intent.putExtra(EXTRA_USERNAME, newUser.getUserName());
-                                startActivity(intent);
+                                //User newUser = new User(username, email, password);
+                                //intent.putExtra(EXTRA_USERNAME, newUser.getUserName());
+                                //startActivity(intent);
                                 finish();
                             } else if (insertValidation == 1) {
                                 String text = "Username already exists";

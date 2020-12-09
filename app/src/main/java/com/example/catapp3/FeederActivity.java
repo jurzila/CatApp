@@ -25,6 +25,7 @@ public class FeederActivity extends AppCompatActivity {
 
     public List<Feeder> feederList = new ArrayList<>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +58,7 @@ public class FeederActivity extends AppCompatActivity {
 
                         Calendar calendar = Calendar.getInstance();
 
-                        SimpleDateFormat dateOnly = new SimpleDateFormat("MM/dd/yyyy");
+                        SimpleDateFormat dateOnly = new SimpleDateFormat("yyyy/MM/dd");
                         String date = dateOnly.format(calendar.getTime());
 
                         SimpleDateFormat timeOnly = new SimpleDateFormat("HH:mm:ss");

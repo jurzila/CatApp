@@ -11,16 +11,19 @@ public class Cat {
     private String breed;
     private String birthday;
     private Double weight;
+    private int catId;
     private int userId;
     private Bitmap picture;
 
-    public Cat(String name, String sex, String breed, String birthday, Double weight, int userId) {
+    public Cat(String name, String sex, String breed, String birthday, Double weight, int catId, int userId, Bitmap picture) {
         this.name = name;
         this.sex = sex;
         this.breed = breed;
         this.birthday = birthday;
         this.weight = weight;
+        this.catId = catId;
         this.userId = userId;
+        this.picture = picture;
     }
 
     public Cat(String name, String birthday, int userId, Bitmap picture) {
@@ -29,6 +32,10 @@ public class Cat {
         this.userId = userId;
         this.picture = picture;
 
+    }
+
+    public int getCatId() {
+        return catId;
     }
 
     public Double getWeight() {
@@ -57,5 +64,10 @@ public class Cat {
 
     public Bitmap getPicture() {
         return picture;
+    }
+
+    @Override
+    public String toString() {
+        return ""+getName();
     }
 }
