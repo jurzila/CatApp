@@ -24,6 +24,7 @@ import java.util.List;
 public class FeederActivity extends AppCompatActivity {
 
     public List<Feeder> feederList = new ArrayList<>();
+    int feedingCount = 0;
 
 
     @Override
@@ -61,7 +62,7 @@ public class FeederActivity extends AppCompatActivity {
                         SimpleDateFormat dateOnly = new SimpleDateFormat("yyyy/MM/dd");
                         String date = dateOnly.format(calendar.getTime());
 
-                        SimpleDateFormat timeOnly = new SimpleDateFormat("HH:mm:ss");
+                        SimpleDateFormat timeOnly = new SimpleDateFormat("HH:mm");
                         String time = timeOnly.format(calendar.getTime());
 
                         final DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {

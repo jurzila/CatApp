@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/insert_calories_fed"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         app:layout_constraintBottom_toTopOf="@+id/button_fed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"

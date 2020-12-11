@@ -37,4 +37,9 @@ public class FeedingMonitorActivity extends AppCompatActivity {
         monthData.setText("Last month average cat calories gain: "+ monthAverage);
 
     }
+
+    //private int getAge(int catId){
+
+    //}
+
 }

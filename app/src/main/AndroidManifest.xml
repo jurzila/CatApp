@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CatApp3">
-        <activity android:name=".CatSelectionActivity"></activity>
+        <activity android:name=".FeedingEntriesActivity"></activity>
+        <activity android:name=".ProfileViewActivity" />
+        <activity android:name=".CatSelectionActivity" />
         <activity android:name=".FeedingMonitorActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>

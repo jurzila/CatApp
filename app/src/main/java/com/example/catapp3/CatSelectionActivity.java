@@ -21,6 +21,7 @@ public class CatSelectionActivity extends AppCompatActivity {
 
     private List<Cat> cats;
     public static String EXTRA_CAT_ID;
+    private int currentUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,8 @@ public class CatSelectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cat_selection);
 
         Intent loginIntent = getIntent();
-        int currentUserId = Integer.valueOf(loginIntent.getExtras().get(LoginActivity.EXTRA_USER_ID).toString());
+        currentUserId = Integer.valueOf(loginIntent.getExtras().get(LoginActivity.EXTRA_USER_ID).toString());
+        currentUserId = Integer.valueOf(loginIntent.getExtras().get(ProfileViewActivity.EXTRA_USER_ID).toString());
 
         cats = new ArrayList<>();
         cats = worker.getAllUserCats(currentUserId);
@@ -45,9 +47,10 @@ public class CatSelectionActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intentChooseCat = new Intent(CatSelectionActivity.this, HomeActivity.class);
                 Cat clickedCat = cats.get(position);
-                intentChooseCat.putExtra(EXTRA_CAT_ID, clickedCat.getCatId());
-
+                int catId = clickedCat.getCatId();
+                intentChooseCat.putExtra(EXTRA_CAT_ID, catId);
                 startActivity(intentChooseCat);
+                finish();
             }
         });
     }

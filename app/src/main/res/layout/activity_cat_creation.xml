@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/cat_s_weight"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         app:layout_constraintBottom_toTopOf="@+id/createCatButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

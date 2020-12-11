@@ -2,6 +2,8 @@ package com.example.catapp3;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,22 +18,22 @@ import android.widget.TextView;
 import com.example.catapp3.database.DatabaseDataWorker;
 import com.example.catapp3.database.CatOpenHelper;
 import com.example.catapp3.model.Cat;
+import com.example.catapp3.model.Feeder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class HomeActivity extends AppCompatActivity {
 
     public static String EXTRA_CAT_ID;
+    public static String EXTRA_USER_ID;
     private String lastFeed;
     private int currentCatId;
     private ImageView catPicture;
     private TextView catName;
-    //private int feedingCount=0;
-
-
+    private Feeder lastFeedData;
+    private Cat currentCat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
 
         super.onCreate(savedInstanceState);
         CatOpenHelper helper = new CatOpenHelper(this);
@@ -45,16 +47,24 @@ public class HomeActivity extends AppCompatActivity {
         currentCatId = Integer.valueOf(loginIntent.getExtras().get(CatCreationActivity.EXTRA_CAT_ID).toString());
 
         catPicture = findViewById(R.id.catPictureDisplay);
-        Cat currentCat = worker.getCat(currentCatId);
+        currentCat = worker.getCat(currentCatId);
 
         try{
             Bitmap pictureFull = currentCat.getPicture();
-        Bitmap pictureSmall = Bitmap.createScaledBitmap(pictureFull, 120, 120, false);
-        catPicture.setImageBitmap(pictureSmall);
-        }catch (NullPointerException nP){
+            catPicture.setImageBitmap(pictureFull);
+            }catch (NullPointerException nP){
             Drawable profileDefault = getResources().getDrawable(R.drawable.profile_default);
             catPicture.setImageDrawable(profileDefault);
         }
+
+        catPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent openProfileIntent = new Intent(HomeActivity.this, ProfileViewActivity.class);
+                openProfileIntent.putExtra(EXTRA_CAT_ID, currentCatId);
+                startActivity(openProfileIntent);
+            }
+        });
 
         catName = findViewById(R.id.catNameDisplay);
         catName.setText(currentCat.getName());
@@ -63,19 +73,38 @@ public class HomeActivity extends AppCompatActivity {
 
         TextView lastFeedInfo = findViewById(R.id.displayLastFeed);
 
+
+
         try {
-            lastFeed ="Last time the" + worker.getLastFeed(currentCatId).toString() + "."; // Cat was fed " + feedingCount + " times today.";
+            lastFeedData = worker.getLastFeed(currentCatId);
+            lastFeed ="Last time the cat was fed at " +
+                    lastFeedData.getTimeFed() +
+                    ", fed by " + lastFeedData.getWhoFed() +
+                    ". Cat was fed " + worker.countHowManyTimesFed(currentCatId) +
+                    " times today.";
         } catch (CursorIndexOutOfBoundsException e) {
             lastFeed = "Never been fed yet";
         }catch (NullPointerException npe){
             lastFeed = "Never been fed yet";
         }
+
+        lastFeedInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent openListIntent = new Intent(HomeActivity.this, FeedingEntriesActivity.class);
+                openListIntent.putExtra(EXTRA_CAT_ID, currentCatId);
+                startActivity(openListIntent);
+            }
+        });
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 lastFeedInfo.setText(lastFeed);
             }
         });
+
+
 
 
         feedButtonOp.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +130,32 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton addCat = findViewById(R.id.addCatActionButton);
+        addCat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent catCreationIntent = new Intent(HomeActivity.this, CatCreationActivity.class);
+                        int currentUserId = worker.getUserIdFromCat(currentCatId);
+                        catCreationIntent.putExtra(EXTRA_USER_ID, currentUserId);
+                        startActivity(catCreationIntent);
+                        finish();
+
+                    }
+                };
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                builder
+                        .setMessage("Do you want to add new cat?")
+                        .setPositiveButton("Yes", positiveListener)
+                        .setNegativeButton("No", null)
+                        .show();
+
+            }
+        });
     }
 
     @Override
@@ -114,7 +169,12 @@ public class HomeActivity extends AppCompatActivity {
         currentCatId = Integer.valueOf(loginIntent.getExtras().get(LoginActivity.EXTRA_CAT_ID).toString());
 
         try {
-            lastFeed ="Last time the" + worker.getLastFeed(currentCatId).toString() + ".";
+            lastFeedData = worker.getLastFeed(currentCatId);
+            lastFeed ="Last time the cat was fed at " +
+                    lastFeedData.getTimeFed() +
+                    ", fed by " +lastFeedData.getWhoFed() +
+                    ". Cat was fed " + worker.countHowManyTimesFed(currentCatId) +
+                    " times today.";
         } catch (CursorIndexOutOfBoundsException e) {
             lastFeed = "Never been fed yet";
         }catch (NullPointerException npe){
@@ -122,6 +182,15 @@ public class HomeActivity extends AppCompatActivity {
         }
         TextView lastFeedInfo = findViewById(R.id.displayLastFeed);
         lastFeedInfo.setText(lastFeed);
+
+        try{
+            Bitmap pictureFull = currentCat.getPicture();
+            catPicture.setImageBitmap(pictureFull);
+        }catch (NullPointerException nP){
+            Drawable profileDefault = getResources().getDrawable(R.drawable.profile_default);
+            catPicture.setImageDrawable(profileDefault);
+        }
+
         //TODO: make code less repetitive
     }
 

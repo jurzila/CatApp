@@ -35,6 +35,6 @@ public class Feeder {
 
     @Override
     public String toString() {
-        return " cat was fed at " +getTimeFed()+ " by " +getWhoFed();
+        return " Was fed at " +getTimeFed()+ " "+getDateFed()+" "+getCalories()+" calories by " +getWhoFed();
     }
 }

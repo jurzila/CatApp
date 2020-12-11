@@ -37,13 +37,13 @@ import java.util.Locale;
 public class CatCreationActivity extends AppCompatActivity {
 
     public static String EXTRA_CAT_ID;
-    private Date dateOfBirth;
     private static int RESULT_LOAD_IMAGE = 1;
     private ImageView catImageView;
     private String picturePath;
     private Bitmap importedPicture;
     private EditText dateOfBirthEditText;
     private Calendar myCalendar;
+    private int userId;
 
 
     @Override
@@ -72,7 +72,7 @@ public class CatCreationActivity extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
-                // TODO Auto-generated method stub
+
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -85,7 +85,7 @@ public class CatCreationActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+
                 new DatePickerDialog(CatCreationActivity.this, date, myCalendar
                         .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
@@ -97,7 +97,8 @@ public class CatCreationActivity extends AppCompatActivity {
         catImageView = findViewById(R.id.catProfilePicture);
         Intent intentLogin = getIntent();
         Intent intentCreateNewCat = new Intent(CatCreationActivity.this, HomeActivity.class);
-        int userId = Integer.valueOf(intentLogin.getExtras().get(LoginActivity.EXTRA_USER_ID).toString());
+        userId = Integer.valueOf(intentLogin.getExtras().get(LoginActivity.EXTRA_USER_ID).toString());
+        userId = Integer.valueOf(intentLogin.getExtras().get(HomeActivity.EXTRA_USER_ID).toString());
 
         Bitmap importedPicture = BitmapFactory.decodeResource(getResources(),R.drawable.profile_default);
         catImageView.setImageBitmap(importedPicture);
@@ -152,6 +153,7 @@ public class CatCreationActivity extends AppCompatActivity {
                         int catId = worker.getCatIDMultipleCats(userId, name);
                         intentCreateNewCat.putExtra(EXTRA_CAT_ID, catId);
                         startActivity(intentCreateNewCat);
+                        finish();
                     }
                 }
             }
@@ -192,7 +194,7 @@ public class CatCreationActivity extends AppCompatActivity {
         }
     }
     private void updateLabel() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
         dateOfBirthEditText.setText(sdf.format(myCalendar.getTime()));
     }
 

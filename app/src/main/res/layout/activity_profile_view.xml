@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ProfileViewActivity">
+
+    <ImageView
+        android:id="@+id/pictureimageView"
+        android:layout_width="162dp"
+        android:layout_height="134dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintBottom_toTopOf="@+id/pictureChangeButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/profile_default" />
+
+    <TextView
+        android:id="@+id/nameCtextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/sexCtextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.186"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pictureChangeButton" />
+
+    <TextView
+        android:id="@+id/sexCtextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/breedCtextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.186"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameCtextView" />
+
+    <TextView
+        android:id="@+id/breedCtextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/agetextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.186"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sexCtextView" />
+
+    <TextView
+        android:id="@+id/agetextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/weightCeditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.186"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/breedCtextView" />
+
+    <Button
+        android:id="@+id/pictureChangeButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save new picture"
+        app:layout_constraintBottom_toTopOf="@+id/nameCtextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pictureimageView" />
+
+    <Button
+        android:id="@+id/updateWeightButton"
+        android:layout_width="168dp"
+        android:layout_height="51dp"
+        android:text="Update weight"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/weightCeditText"
+        app:layout_constraintTop_toBottomOf="@+id/agetextView"
+        app:layout_constraintVertical_bias="0.509" />
+
+    <Button
+        android:id="@+id/otherCatButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select another cat"
+        app:layout_constraintBottom_toTopOf="@+id/pictureimageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023" />
+
+    <EditText
+        android:id="@+id/weightCeditText"
+        android:layout_width="114dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="32dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/updateWeightButton"
+        app:layout_constraintHorizontal_bias="0.511"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/agetextView" />
+</androidx.constraintlayout.widget.ConstraintLayout>

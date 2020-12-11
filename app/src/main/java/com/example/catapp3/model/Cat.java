@@ -2,6 +2,10 @@ package com.example.catapp3.model;
 
 import android.graphics.Bitmap;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Cat {
@@ -32,6 +36,10 @@ public class Cat {
         this.userId = userId;
         this.picture = picture;
 
+    }
+
+    public int getUserId() {
+        return userId;
     }
 
     public int getCatId() {
@@ -70,4 +78,5 @@ public class Cat {
     public String toString() {
         return ""+getName();
     }
+
 }

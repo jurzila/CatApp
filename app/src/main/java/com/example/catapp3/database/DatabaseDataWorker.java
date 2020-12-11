@@ -13,6 +13,8 @@ import com.example.catapp3.model.User;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.ByteBuffer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -23,7 +25,7 @@ import java.util.List;
 
 public class DatabaseDataWorker {
 
-   private SQLiteDatabase db;
+    private SQLiteDatabase db;
     private User currentUser;
     private byte[] imageBytes;
     private Cat currentCatProf;
@@ -31,45 +33,45 @@ public class DatabaseDataWorker {
     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
     public DatabaseDataWorker(SQLiteDatabase db) {
-       this.db = db;
-   }
+        this.db = db;
+    }
 
-   public void insertDiet(int catId, Double calories,String date, String time, String whoFed){
+    public void insertDiet(int catId, Double calories, String date, String time, String whoFed) {
 
-       //TODO: Isert cat picture into database as well.
-       ContentValues values = new ContentValues();
 
-       values.put(CatDatabaseContract.FeedingEntry.COLUMN_CATID, catId);
-       values.put(CatDatabaseContract.FeedingEntry.COLUMN_DATE, String.valueOf(date));
-       values.put(CatDatabaseContract.FeedingEntry.COLUMN_TIME, String.valueOf(time));
-       values.put(CatDatabaseContract.FeedingEntry.COLUMN_CALORIES, calories);
-       values.put(CatDatabaseContract.FeedingEntry.COLUMN_NAME, whoFed);
-
-       db.insert(CatDatabaseContract.FeedingEntry.TABLE_NAME, null, values);
-   }
-
-    public int insertUser(String username,String email, String password){
-        int result = 0;
-        if(!isUsernameExist(username) && !isEmailExist(email)){
         ContentValues values = new ContentValues();
 
-        values.put(CatDatabaseContract.userTable.COLUMN_USERNAME, username);
-        values.put(CatDatabaseContract.userTable.COLUMN_EMAIL, email);
-        values.put(CatDatabaseContract.userTable.COLUMN_PASSWORD, password);
+        values.put(CatDatabaseContract.FeedingEntry.COLUMN_CATID, catId);
+        values.put(CatDatabaseContract.FeedingEntry.COLUMN_DATE, String.valueOf(date));
+        values.put(CatDatabaseContract.FeedingEntry.COLUMN_TIME, String.valueOf(time));
+        values.put(CatDatabaseContract.FeedingEntry.COLUMN_CALORIES, calories);
+        values.put(CatDatabaseContract.FeedingEntry.COLUMN_NAME, whoFed);
 
-        db.insert(CatDatabaseContract.userTable.TABLE_NAME, null, values);
+        db.insert(CatDatabaseContract.FeedingEntry.TABLE_NAME, null, values);
+    }
+
+    public int insertUser(String username, String email, String password) {
+        int result = 0;
+        if (!isUsernameExist(username) && !isEmailExist(email)) {
+            ContentValues values = new ContentValues();
+
+            values.put(CatDatabaseContract.userTable.COLUMN_USERNAME, username);
+            values.put(CatDatabaseContract.userTable.COLUMN_EMAIL, email);
+            values.put(CatDatabaseContract.userTable.COLUMN_PASSWORD, password);
+
+            db.insert(CatDatabaseContract.userTable.TABLE_NAME, null, values);
             result = 0;
-        }else if(isUsernameExist(username) && isEmailExist(email)){
+        } else if (isUsernameExist(username) && isEmailExist(email)) {
             result = 3;
-        }else if(isUsernameExist(username)){
+        } else if (isUsernameExist(username)) {
             result = 1;
-        }else if (isEmailExist(email)){
+        } else if (isEmailExist(email)) {
             result = 2;
         }
         return result;
     }
 
-    public void insertCat(Integer id, String name,String sex, String breed, String dateOfBirth, Double weight, String path){
+    public void insertCat(Integer id, String name, String sex, String breed, String dateOfBirth, Double weight, String path) {
 
         ContentValues values = new ContentValues();
 
@@ -84,7 +86,7 @@ public class DatabaseDataWorker {
         db.insert(CatDatabaseContract.catTable.TABLE_NAME, null, values);
     }
 
-    public void insertCatBtm(Integer id, String name,String sex, String breed, String dateOfBirth, Double weight, Bitmap picture){
+    public void insertCatBtm(Integer id, String name, String sex, String breed, String dateOfBirth, Double weight, Bitmap picture) {
 
         ContentValues values = new ContentValues();
 
@@ -99,7 +101,7 @@ public class DatabaseDataWorker {
         db.insert(CatDatabaseContract.catTable.TABLE_NAME, null, values);
     }
 
-    public int getUserID(String username){
+    public int getUserID(String username) {
 
         int userId = 0;
         String whereClause = "ID=?";
@@ -118,14 +120,14 @@ public class DatabaseDataWorker {
                 null,
                 null);
 
-        while(csr.moveToNext()) {
+        while (csr.moveToNext()) {
             int IdIndex = csr.getColumnIndex(CatDatabaseContract.userTable.COLUMN_ID);
             userId = csr.getInt(IdIndex);
         }
         return userId;
     }
 
-    public User getUserPassword(String givenUsername){
+    public User getUserPassword(String givenUsername) {
 
         String whereClause = "Username=?";
         String[] whereArgs = new String[]{String.valueOf(givenUsername)};
@@ -143,7 +145,7 @@ public class DatabaseDataWorker {
                 null,
                 null);
 
-        while(csr.moveToNext()) {
+        while (csr.moveToNext()) {
 
             int idIndex = csr.getColumnIndex(CatDatabaseContract.userTable.COLUMN_ID);
             int id = csr.getInt(idIndex);
@@ -164,7 +166,7 @@ public class DatabaseDataWorker {
     }
 
 
-    public int getCatID(int userId){
+    public int getCatID(int userId) {
 
         int catId = 0;
         String whereClause = "UserId=?";
@@ -194,7 +196,36 @@ public class DatabaseDataWorker {
         return catId;
     }
 
-    public int getCatIDMultipleCats(int userId, String name){
+    public int getUserIdFromCat(int catId) {
+        int userId = 0;
+        String whereClause = "CatId=?";
+        String[] whereArgs = new String[]{String.valueOf(catId)};
+        String[] columns = {
+                CatDatabaseContract.catTable.COLUMN_USER_ID,
+                CatDatabaseContract.catTable.COLUMN_CATID,
+                CatDatabaseContract.catTable.COLUMN_NAME,
+                CatDatabaseContract.catTable.COLUMN_SEX,
+                CatDatabaseContract.catTable.COLUMN_BREED,
+                CatDatabaseContract.catTable.COLUMN_DOB,
+                CatDatabaseContract.catTable.COLUMN_WEIGHT,
+                CatDatabaseContract.catTable.COLUMN_IMAGE_DATA,
+        };
+        Cursor csr = db.query(CatDatabaseContract.catTable.TABLE_NAME,
+                columns,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null);
+
+        if (csr.moveToFirst()) {
+            int IdIndex = csr.getColumnIndex(CatDatabaseContract.catTable.COLUMN_USER_ID);
+            userId = csr.getInt(IdIndex);
+        }
+        return userId;
+    }
+
+    public int getCatIDMultipleCats(int userId, String name) {
 
         int catId = 0;
         String whereClause = "UserId=? AND Name=?";
@@ -273,7 +304,7 @@ public class DatabaseDataWorker {
         return cats;
     }
 
-    public Cat getCat(int currentCat){
+    public Cat getCat(int currentCat) {
         String whereClause = "CatId=?";
         String[] whereArgs = new String[]{String.valueOf(currentCat)};
 
@@ -299,17 +330,23 @@ public class DatabaseDataWorker {
 
             int userIdIndex = csr.getColumnIndex(CatDatabaseContract.catTable.COLUMN_USER_ID);
             int userId = csr.getInt(userIdIndex);
-            //int catIdIndex = csr.getColumnIndex(CatDatabaseContract.catTable.COLUMN_CATID);
-            //int catId = csr.getInt(catIdIndex);
+            int catIdIndex = csr.getColumnIndex(CatDatabaseContract.catTable.COLUMN_CATID);
+            int catId = csr.getInt(catIdIndex);
             int nameIndex = csr.getColumnIndex(CatDatabaseContract.catTable.COLUMN_NAME);
             String name = csr.getString(nameIndex);
+            int sexIndex = csr.getColumnIndex(CatDatabaseContract.catTable.COLUMN_SEX);
+            String sex = csr.getString(sexIndex);
+            int breedIndex = csr.getColumnIndex(CatDatabaseContract.catTable.COLUMN_BREED);
+            String breed = csr.getString(breedIndex);
+            int weightIndex = csr.getColumnIndex(CatDatabaseContract.catTable.COLUMN_WEIGHT);
+            double weight = csr.getDouble(weightIndex);
             int dateIndex = csr.getColumnIndex(CatDatabaseContract.catTable.COLUMN_DOB);
             String date = csr.getString(dateIndex);
             int imgDataIndex = csr.getColumnIndex(CatDatabaseContract.catTable.COLUMN_IMAGE_DATA);
             imageBytes = csr.getBlob(imgDataIndex);
-            Bitmap catPicture = BitmapFactory.decodeByteArray(imageBytes,0,imageBytes.length);
+            Bitmap catPicture = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
 
-            currentCatProf = new Cat(name, date, userId, catPicture);
+            currentCatProf = new Cat(name, sex, breed, date, weight, catId, userId, catPicture);
 
         }
 
@@ -354,7 +391,44 @@ public class DatabaseDataWorker {
         return lastFeed;
     }
 
-    private boolean isUsernameExist(String value){
+    public List<Feeder> getAllFeeds(int currentCat) {
+
+        String whereClause = "CatId=?";
+        String[] whereArgs = new String[]{String.valueOf(currentCat)};
+
+        String[] columns = {
+                CatDatabaseContract.FeedingEntry.COLUMN_CATID,
+                CatDatabaseContract.FeedingEntry.COLUMN_DATE,
+                CatDatabaseContract.FeedingEntry.COLUMN_TIME,
+                CatDatabaseContract.FeedingEntry.COLUMN_CALORIES,
+                CatDatabaseContract.FeedingEntry.COLUMN_NAME};
+        Cursor cursor = db.query(CatDatabaseContract.FeedingEntry.TABLE_NAME, columns,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                CatDatabaseContract.FeedingEntry.COLUMN_DATE + " DESC, " + CatDatabaseContract.FeedingEntry.COLUMN_DATE + " ASC");
+
+        List<Feeder> allFeeds = new ArrayList<>();
+
+        while (cursor.moveToNext()) {
+
+            int dateIndex = cursor.getColumnIndex(CatDatabaseContract.FeedingEntry.COLUMN_DATE);
+            String date = cursor.getString(dateIndex);
+            int timeIndex = cursor.getColumnIndex(CatDatabaseContract.FeedingEntry.COLUMN_TIME);
+            String time = cursor.getString(timeIndex);
+            int calIndex = cursor.getColumnIndex(CatDatabaseContract.FeedingEntry.COLUMN_CALORIES);
+            Double cal = cursor.getDouble(calIndex);
+            int nameIndex = cursor.getColumnIndex(CatDatabaseContract.FeedingEntry.COLUMN_NAME);
+            String whoFed = cursor.getString(nameIndex);
+
+            allFeeds.add(new Feeder(cal, date, time, whoFed));
+        }
+        return allFeeds;
+    }
+
+
+    private boolean isUsernameExist(String value) {
 
         String whereClause = "Username=?";
         String[] whereArgs = new String[]{String.valueOf(value)};
@@ -377,7 +451,7 @@ public class DatabaseDataWorker {
 
     }
 
-    private boolean isEmailExist(String value){
+    private boolean isEmailExist(String value) {
 
         String whereClause = "Email=?";
         String[] whereArgs = new String[]{String.valueOf(value)};
@@ -401,7 +475,7 @@ public class DatabaseDataWorker {
 
     }
 
-    public int isCatCreated(int userId){
+    public int isCatCreated(int userId) {
         String whereClause = "UserId=?";
         String[] whereArgs = new String[]{String.valueOf(userId)};
 
@@ -433,7 +507,7 @@ public class DatabaseDataWorker {
             FileInputStream fis = new FileInputStream(f);
             byte[] buffer = new byte[1024];
             bos = new ByteArrayOutputStream();
-            for (int len; (len = fis.read(buffer)) != -1;) {
+            for (int len; (len = fis.read(buffer)) != -1; ) {
                 bos.write(buffer, 0, len);
             }
         } catch (Exception e) {
@@ -443,64 +517,120 @@ public class DatabaseDataWorker {
         return bos != null ? bos.toByteArray() : null;
     }
 
-    private byte[] readPicture(Bitmap givenPicture){
+    private byte[] readPicture(Bitmap givenPicture) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         givenPicture.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
-        return  byteArray;
+        return byteArray;
     }
 
-    public double selectLastDayData(int currentCatId){
+    public double selectLastDayData(int currentCatId) {
         String whereClause = "Date=? AND CatId=?";
-        String[] whereArgs = new String[]{getYesterdayDateString(),Integer.toString(currentCatId)};
-        String query = "SELECT AVG("+CatDatabaseContract.FeedingEntry.COLUMN_CALORIES +") " +
-                "FROM "+CatDatabaseContract.FeedingEntry.TABLE_NAME+
-                " WHERE "+ whereClause;
+        String[] whereArgs = new String[]{getYesterdayDateString(), Integer.toString(currentCatId)};
+        String query = "SELECT AVG(" + CatDatabaseContract.FeedingEntry.COLUMN_CALORIES + ") " +
+                "FROM " + CatDatabaseContract.FeedingEntry.TABLE_NAME +
+                " WHERE " + whereClause;
 
         Cursor cursor = db.rawQuery(query, whereArgs);
 
         cursor.moveToFirst();
 
         double dayAverage = cursor.getDouble(0);
+        BigDecimal bd = BigDecimal.valueOf(dayAverage);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
 
-        return dayAverage;
+        return bd.doubleValue();
 
     }
 
-    public double selectLastWeekData(int currentCatId){
+    public int countHowManyTimesFed(int catId) {
+        String whereClause = "CatId=? AND Date=?";
+        String[] whereArgs = new String[]{String.valueOf(catId), getToday()};
+
+        String[] columns = {
+                CatDatabaseContract.FeedingEntry.COLUMN_CATID,
+                CatDatabaseContract.FeedingEntry.COLUMN_DATE,
+                CatDatabaseContract.FeedingEntry.COLUMN_TIME,
+                CatDatabaseContract.FeedingEntry.COLUMN_CALORIES,
+                CatDatabaseContract.FeedingEntry.COLUMN_NAME};
+        Cursor cursor = db.query(CatDatabaseContract.FeedingEntry.TABLE_NAME, columns,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null);
+
+        int timesFed = cursor.getCount();
+
+        return timesFed;
+
+    }
+
+    public double selectLastWeekData(int currentCatId) {
+        double sum = 0;
         String whereClause = "Date>? AND CatId=?";
-        String[] whereArgs = new String[]{getWeekDateString(),Integer.toString(currentCatId)};
-        String query = "SELECT AVG("+CatDatabaseContract.FeedingEntry.COLUMN_CALORIES +") " +
-                "FROM "+CatDatabaseContract.FeedingEntry.TABLE_NAME+
-                " WHERE "+ whereClause+
-                " ORDER BY "+CatDatabaseContract.FeedingEntry.COLUMN_DATE;
+        String[] whereArgs = new String[]{getWeekDateString(), Integer.toString(currentCatId)};
+        String query = "SELECT " + CatDatabaseContract.FeedingEntry.COLUMN_DATE + ", AVG(" + CatDatabaseContract.FeedingEntry.COLUMN_CALORIES + ") AS DayAverage " +
+                "FROM " + CatDatabaseContract.FeedingEntry.TABLE_NAME +
+                " WHERE " + whereClause +
+                " GROUP BY " + CatDatabaseContract.FeedingEntry.COLUMN_DATE;
 
         Cursor cursor = db.rawQuery(query, whereArgs);
 
+        while (cursor.moveToNext()) {
+
+            int dayAverageIndex = cursor.getColumnIndex("DayAverage");
+            double dayAverage = cursor.getInt(dayAverageIndex);
+            sum += dayAverage;
+        }
         cursor.moveToFirst();
 
-        double weekAverage = cursor.getDouble(0);
+        double weekAverage = sum / cursor.getCount();
+        BigDecimal bd = BigDecimal.valueOf(weekAverage);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
 
-        return weekAverage;
+        return bd.doubleValue();
 
     }
 
-    public double selectLastMonthData(int currentCatId){
+    public double selectLastMonthData(int currentCatId) {
+        double sum = 0;
         String whereClause = "Date>? AND CatId=?";
-        String[] whereArgs = new String[]{getMonthDateString(),Integer.toString(currentCatId)};
-        String query = "SELECT AVG("+CatDatabaseContract.FeedingEntry.COLUMN_CALORIES +") " +
-                "FROM "+CatDatabaseContract.FeedingEntry.TABLE_NAME+
-                " WHERE "+ whereClause;
+        String[] whereArgs = new String[]{getMonthDateString(), Integer.toString(currentCatId)};
+        String query = "SELECT " + CatDatabaseContract.FeedingEntry.COLUMN_DATE + ", AVG(" + CatDatabaseContract.FeedingEntry.COLUMN_CALORIES + ") AS DayAverage " +
+                "FROM " + CatDatabaseContract.FeedingEntry.TABLE_NAME +
+                " WHERE " + whereClause +
+                " GROUP BY " + CatDatabaseContract.FeedingEntry.COLUMN_DATE;
 
         Cursor cursor = db.rawQuery(query, whereArgs);
 
+        while (cursor.moveToNext()) {
+
+            int dayAverageIndex = cursor.getColumnIndex("DayAverage");
+            double dayAverage = cursor.getInt(dayAverageIndex);
+            sum += dayAverage;
+        }
         cursor.moveToFirst();
 
-        double monthAverage = cursor.getDouble(0);
+        double monthAverage = sum / cursor.getCount();
+        BigDecimal bd = BigDecimal.valueOf(monthAverage);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
 
-        return monthAverage;
-
+        return bd.doubleValue();
     }
+
+    public void updateCatWeight(int catId, double weight) {
+        ContentValues values = new ContentValues();
+        values.put(CatDatabaseContract.catTable.COLUMN_WEIGHT, weight);
+        db.update(CatDatabaseContract.catTable.TABLE_NAME, values, "CatId=?", new String[]{String.valueOf(catId)});
+    }
+
+    public void updateCatPicture(int catId, Bitmap picture) {
+        ContentValues values = new ContentValues();
+        values.put(CatDatabaseContract.catTable.COLUMN_IMAGE_DATA, readPicture(picture));
+        db.update(CatDatabaseContract.catTable.TABLE_NAME, values, "CatId=?", new String[]{String.valueOf(catId)});
+    }
+
 
     private String getYesterdayDateString() {
 
@@ -523,47 +653,11 @@ public class DatabaseDataWorker {
         return dateFormat.format(yesterday);
     }
 
-
-
-
-
-    /* public User getUser(String username){
-
-
-
-    }*/
-
-   /*public List<Feeder> getAllDietEntries() throws ParseException {
-       String[] columns = {
-               CatDatabaseContract.FeedingEntry.COLUMN_TIME,
-               CatDatabaseContract.FeedingEntry.COLUMN_CALORIES,
-               CatDatabaseContract.FeedingEntry.COLUMN_NAME};
-       Cursor cursor = db.query(CatDatabaseContract.FeedingEntry.TABLE_NAME,
-               columns,
-               null,
-               null,
-               null,
-               null,
-               null);
-       List<Feeder> feederList = new ArrayList<>();
-
-       while(cursor.moveToNext()){
-
-           int calIndex = cursor.getColumnIndex(CatDatabaseContract.FeedingEntry.COLUMN_CALORIES);
-           Double cal = cursor.getDouble(calIndex);
-
-           int timeIndex = cursor.getColumnIndex(CatDatabaseContract.FeedingEntry.COLUMN_TIME);
-           String time = cursor.getString(timeIndex);
-           Date time1 = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z").parse(time);
-
-           int nameIndex = cursor.getColumnIndex(CatDatabaseContract.FeedingEntry.COLUMN_NAME);
-           String whoFed = cursor.getString(timeIndex);
-
-           feederList.add(new Feeder(cal, time1, whoFed));
-       }
-
-       return feederList;
-
-   }*/
+    private String getToday() {
+        SimpleDateFormat dateOnly = new SimpleDateFormat("yyyy/MM/dd");
+        String today = dateOnly.format(cal.getTime());
+        return today;
+    }
 
 }
+
